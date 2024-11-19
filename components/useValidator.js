@@ -1,4 +1,4 @@
-export function useValidator(schemes, checkIsFocus) {
+export function useValidator(schemes = [], checkIsFocus) {
   const schemesRef = [...schemes]; // Make a copy to track changes
   const errors = {};
 
@@ -12,8 +12,9 @@ export function useValidator(schemes, checkIsFocus) {
       if (
         scheme.value === currentScheme.value &&
         (!checkIsFocus || !scheme.focused)
-      )
+      ) {
         return;
+      }
 
       scheme.focused = true;
 
@@ -30,6 +31,7 @@ export function useValidator(schemes, checkIsFocus) {
       }
     });
 
+    
     await Promise.all(promises);
     Object.assign(errors, errs); // Update the global errors object
     Object.assign(schemesRef, schemes); // Update the schemesRef
@@ -53,10 +55,12 @@ export function useValidator(schemes, checkIsFocus) {
         errs[scheme.key] = message;
       }
     });
-
+    
+    
     await Promise.all(promises);
     Object.assign(errors, errs); // Update the global errors object
-
+    
+    console.log(errors);
     return !Object.keys(errors).length;
   };
 
