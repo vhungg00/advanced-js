@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Document</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.8em;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="registration-form">
+        <div class="form-field">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <div id="username-error" class="error"></div>
+        </div>
+
+        <div class="form-field">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <div id="email-error" class="error"></div>
+        </div>
+
+        <div class="form-field">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <div id="password-error" class="error"></div>
+        </div>
+
+        <button type="button" id="submit-button">Register</button>
+    </form>
+    <input type="text" placeholder="Enter car name" id="input" />
+    <button id="button">Add New Car</button>
+    <ol id="root"></ol>
+    <script type="module" src="/script.js"></script>
+</body>
+
+</html>
