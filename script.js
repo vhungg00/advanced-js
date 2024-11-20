@@ -106,3 +106,44 @@ const app = (function () {
 })();
 
 app.init();
+
+const array = new Array(
+  5,
+  2,
+  1,
+  3,
+  4,
+  5,
+  1,
+  5,
+  4,
+  3,
+  2,
+  1
+);
+
+console.log(array);
+
+const loop = (start, end, callback) => {
+  if (start < end) {
+    callback(start);
+    return loop(start + 1, end, callback);
+  }
+};
+
+loop(0, 5, (index) => {
+  console.log(index);
+});
+
+const removeData = (data, index = 0, result = []) => {
+  if (index === data.length) {
+    return result;
+  }
+  if (!result.includes(data[index])) {
+    result.push(data[index]);
+  }
+
+  return removeData(data, index + 1, result);
+};
+
+console.log(removeData(array));

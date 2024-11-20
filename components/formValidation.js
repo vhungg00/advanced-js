@@ -15,7 +15,7 @@ const schemes = [
     value: "",
     required: true,
     message: "Email is required",
-    focused: true,
+    focused: false,
     validator: async (value) =>
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "Invalid email",
   },
@@ -30,7 +30,10 @@ const schemes = [
   },
 ];
 
-const { isValid, getErrors, resetErrors } = useValidator(schemes);
+const { isValid, getErrors, setError, validate, resetErrors } = useValidator(
+  schemes,
+  true
+);
 
 export async function handleBlur(key, form, schemes) {
   // Find the corresponding scheme
@@ -51,6 +54,7 @@ export async function handleBlur(key, form, schemes) {
     errorElement.textContent = message;
   } else {
     errorElement.textContent = "";
+    resetErrors();
   }
 }
 
@@ -69,8 +73,7 @@ submitButton.addEventListener("click", async () => {
     scheme.value = form[scheme.key].value;
   });
 
-
-  if (await isValid()) {
+  if (await validate()) {
     alert("Registration successful!");
     form.reset();
     resetErrors();

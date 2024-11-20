@@ -30,8 +30,7 @@ export function useValidator(schemes = [], checkIsFocus) {
         errs[scheme.key] = message;
       }
     });
-
-    
+    setError(errs);
     await Promise.all(promises);
     Object.assign(errors, errs); // Update the global errors object
     Object.assign(schemesRef, schemes); // Update the schemesRef
@@ -55,11 +54,10 @@ export function useValidator(schemes = [], checkIsFocus) {
         errs[scheme.key] = message;
       }
     });
-    
-    
+
+    setError(errs);
     await Promise.all(promises);
     Object.assign(errors, errs); // Update the global errors object
-    
     console.log(errors);
     return !Object.keys(errors).length;
   };
@@ -67,10 +65,24 @@ export function useValidator(schemes = [], checkIsFocus) {
   const getTouched = () =>
     schemesRef.length > 0 && schemesRef.some((scheme) => scheme.focused);
 
+  const setError = (errs) => {
+    for (const key in errors) {
+      if (!(key in errs)) {
+        delete errors[key];
+      }
+    }
+    for (const key in errs) {
+      errors[key] = errs[key];
+    }
+    return { ...errors };
+  };
+
+
   return {
     validate,
     isValid,
     getErrors: () => errors,
+    setError,
     getTouched,
     resetErrors: () => {
       for (const key in errors) {
