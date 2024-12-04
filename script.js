@@ -311,3 +311,78 @@ Array.prototype.every2 = function (callback) {
 const newCourses = courses.every2((item, i, arr) => item.coin >= 40);
 
 console.log({ newCourses });
+
+/* Xử dụng class để xây dựng Object contractor ?? hoặc sử dung function contractor */
+class UserClass {
+  constructor(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+  greet() {
+    console.log(`Hello ${this.firstName + " " + this.lastName}`);
+  }
+}
+
+/* prototype */
+
+UserClass.prototype.className = "Advanced";
+UserClass.prototype.getClassName = function () {
+  return this.className;
+};
+
+const person = new UserClass("Ta Van", "Hung");
+
+person.greet();
+console.log(person.getClassName());
+console.log(person);
+
+// Promise.race trả về kết quả từ Promise đầu tiên hoàn thành (fulfilled hoặc rejected).
+const fast = new Promise((_, reject) =>
+  setTimeout(() => reject("Fast reject!"), 5000)
+);
+const slow = new Promise((resolve) =>
+  setTimeout(() => resolve("Slow resolved!"), 3000)
+);
+
+Promise.race([fast, slow])
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((result) => {
+    console.log(result); // Output: "Fast resolved!"
+  });
+
+// Promise.all chạy nhiều Promise song song và chờ tất cả hoàn thành trước khi trả về kết quả.
+
+const promise1 = Promise.resolve([1231, 12]);
+const promise2 = new Promise((resolve) =>
+  setTimeout(() => resolve("Promise 2 resolved!"), 2000)
+);
+const promise3 = new Promise((resolve) =>
+  setTimeout(() => resolve("Promise 3 resolved!"), 1000)
+);
+
+Promise.all([promise1, promise2, promise3]).then((results) => {
+  console.log(results); // Output: ["Promise 1 resolved!", "Promise 2 resolved!", "Promise 3 resolved!"]
+});
+
+/* Nếu bạn không muốn Promise.all bị dừng hoàn toàn khi một Promise bị từ chối, 
+bạn có thể bắt lỗi cho từng Promise 
+bằng cách sử dụng .catch() trước khi đưa vào Promise.all. */
+const promise11 = Promise.resolve("Promise 1 resolved");
+const promise22 = new Promise((resolve, reject) =>
+  setTimeout(() => reject("Promise 2 rejected"), 1000)
+);
+const promise33 = Promise.resolve("Promise 3 resolved");
+
+Promise.all([
+  promise11.catch((error) => ({ error })), // Bắt lỗi riêng lẻ
+  promise22.catch((error) => ({ error })),
+  promise33.catch((error) => ({ error })),
+]).then((results) => {
+  console.log("All results:", results);
+});
+
+// Var / let, const : Scope. Hosting
+// Const / var, let: Assignment
+
