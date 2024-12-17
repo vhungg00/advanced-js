@@ -386,3 +386,71 @@ Promise.all([
 // Var / let, const : Scope. Hosting
 // Const / var, let: Assignment
 
+// Từ khoá this trong jasvascript đề cập đến đối tượng mà nó thuộc về
+/* 
+  Đặc tính
+  - Trong một phương thức, this tham chiếu tói đối tượng truy cập phương thức (exe: đối tượng trước dấu .)
+  - Đứng ngoài phương thức, this tham chiếu tới đối tượng global
+*/
+
+function Car(name, color) {
+  this.name = name;
+  this.color = color;
+  console.log(this);
+
+  this.drive = function () {
+    console.log(this);
+  };
+}
+const porsche = new Car("Porsche", "yellow");
+console.log(porsche);
+
+const car = {
+  name: "Honda",
+  color: "black-red",
+
+  run() {
+    console.log(this);
+  },
+  obChild: {
+    name: "run child",
+    runChild() {
+      console.log(this);
+    },
+  },
+};
+
+console.log(car.obChild.runChild());
+
+const iife = (function () {
+  const cars = [];
+
+  return {
+    get(index) {
+      return cars[index];
+    },
+    add(car) {
+      cars.push(car);
+    },
+    delete(index) {
+      cars.splice(index, 1);
+    },
+  };
+})();
+
+iife.add("vel");
+
+
+function createCounter1() {
+  let counter = 0
+  function increase(){
+    return ++ counter
+  }
+  return increase
+}
+
+const counter = createCounter1();
+
+console.log(counter());
+console.log(counter());
+console.log(counter());
