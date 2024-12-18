@@ -358,13 +358,17 @@ const promise1 = Promise.resolve([1231, 12]);
 const promise2 = new Promise((resolve) =>
   setTimeout(() => resolve("Promise 2 resolved!"), 2000)
 );
-const promise3 = new Promise((resolve) =>
-  setTimeout(() => resolve("Promise 3 resolved!"), 1000)
+const promise3 = new Promise((resolve, reject) =>
+  setTimeout(() => reject("reject"), 1000)
 );
 
-Promise.all([promise1, promise2, promise3]).then((results) => {
-  console.log(results); // Output: ["Promise 1 resolved!", "Promise 2 resolved!", "Promise 3 resolved!"]
-});
+const result = Promise.all([promise1, promise2, promise3]);
+
+result
+  .then((values) => {
+    console.log("All results123:", values);
+  })
+  .catch((err) => console.log(err));
 
 /* Nếu bạn không muốn Promise.all bị dừng hoàn toàn khi một Promise bị từ chối, 
 bạn có thể bắt lỗi cho từng Promise 
@@ -440,13 +444,12 @@ const iife = (function () {
 
 iife.add("vel");
 
-
 function createCounter1() {
-  let counter = 0
-  function increase(){
-    return ++ counter
+  let counter = 0;
+  function increase() {
+    return ++counter;
   }
-  return increase
+  return increase;
 }
 
 const counter = createCounter1();
@@ -454,3 +457,153 @@ const counter = createCounter1();
 console.log(counter());
 console.log(counter());
 console.log(counter());
+
+function createLogger1(namespace) {
+  return function log(message) {
+    console.log(`[${namespace}] ${message}`);
+  };
+}
+
+const logInfo1 = createLogger1("info");
+
+logInfo1("vui long nhap lai email"), "123232";
+
+const promise123 = Promise.resolve([123456]);
+const promise345 = new Promise((resolve) => {
+  setTimeout(() => resolve("Success"), 2000);
+});
+const promise456 = Promise.reject(["failure"]);
+
+const callPromise = Promise.all([
+  promise123.catch((error) => console.log(error)),
+  promise345.catch((error) => console.log(error)),
+  promise456.catch((error) => console.log(error)),
+]);
+
+callPromise
+  .then((values) => console.log(values))
+  .catch((err) => console.log(err));
+
+// Hàm gọi API với callback
+// function fetchApi(url, callback) {
+//   const xhr = new XMLHttpRequest();
+//   xhr.open("GET", url);
+
+//   xhr.onload = function () {
+//     if (xhr.status >= 200 && xhr.status < 300) {
+//       callback(null, JSON.parse(xhr.responseText)); // Thành công
+//     } else {
+//       callback(`Error: ${xhr.status}`, null); // Lỗi
+//     }
+//   };
+
+//   xhr.onerror = function () {
+//     callback("Network Error", null); // Lỗi mạng
+//   };
+
+//   xhr.send();
+// }
+
+// Gọi API để lấy danh sách người dùng
+// fetchApi("https://jsonplaceholder.typicode.com/users", (err, users) => {
+//   if (err) {
+//     console.error(err);
+//     return;
+//   }
+//   console.log("Danh sách người dùng:", users);
+
+//   // Gọi API tiếp theo để lấy chi tiết của người dùng đầu tiên
+//   const userId = users[0].id; // Lấy ID của người dùng đầu tiên
+//   fetchApi(
+//     `https://jsonplaceholder.typicode.com/users/${userId}`,
+//     (err, userDetail) => {
+//       if (err) {
+//         console.error(err);
+//         return;
+//       }
+//       console.log("Thông tin chi tiết người dùng:", userDetail);
+//     }
+//   );
+// });
+
+// function fetchApi(url) {
+//   return fetch(url).then((response) => {
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     return response.json(); // Chuyển đổi dữ liệu JSON
+//   });
+// }
+
+// fetchApi("https://jsonplaceholder.typicode.com/users")
+//   .then((users) => {
+//     console.log("Danh sách người dùng:", users);
+
+//     // Gọi API lấy thông tin chi tiết người dùng đầu tiên
+//     const userId = users[0].id;
+//     return fetchApi(`https://jsonplaceholder.typicode.com/users/${userId}`);
+//   })
+//   .then((userDetail) => {
+//     console.log("Thông tin chi tiết người dùng:", userDetail);
+//   })
+//   .catch((error) => {
+//     console.error("Lỗi khi gọi API:", error);
+//   });
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+sleep(1000)
+  .then(() => {
+    console.log("1s đã qua");
+    return sleep(1000);
+  })
+  .then(() => {
+    console.log("2s đã qua");
+    return sleep(1000);
+  })
+  .then(() => {
+    console.log("3s đã qua");
+    return sleep(1000);
+  });
+
+class User1 {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  greet() {
+    console.log(this);
+    console.log(
+      `Hello, my name is ${this.name} and I'm ${this.age} years old.`
+    );
+  }
+}
+
+const user = new User1("hung", 18);
+
+user.greet();
+
+const Singleton = (function () {
+  let instance;
+
+  function createInstance() {
+    return { name: "I am the single instance" };
+  }
+
+  return {
+    getInstance: function () {
+      if (!instance) {
+        instance = createInstance();
+      }
+      return instance;
+    },
+  };
+})();
+
+const instance1 = Singleton.getInstance();
+const instance2 = Singleton.getInstance();
+console.log(instance1 === instance2); // true
