@@ -1,64 +1,64 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
-const output = $("#output");
-const deposit = $("#deposit");
-const withdraw = $("#withdraw");
+// const output = $("#output");
+// const deposit = $("#deposit");
+// const withdraw = $("#withdraw");
 
-function createStore(reducer) {
-  let state = reducer(undefined, {});
-  const subscribers = [];
+// function createStore(reducer) {
+//   let state = reducer(undefined, {});
+//   const subscribers = [];
 
-  return {
-    getState() {
-      return state;
-    },
-    dispatch(action) {
-      state = reducer(state, action);
-      subscribers.forEach((subscriber) => subscriber());
-    },
-    subscribe(subscriber) {
-      subscribers.push(subscriber);
-    },
-  };
-}
+//   return {
+//     getState() {
+//       return state;
+//     },
+//     dispatch(action) {
+//       state = reducer(state, action);
+//       subscribers.forEach((subscriber) => subscriber());
+//     },
+//     subscribe(subscriber) {
+//       subscribers.push(subscriber);
+//     },
+//   };
+// }
 
-function reducer(state = 0, action) {
-  switch (action.type) {
-    case "DEPOSIT":
-      return state + action.payload;
-    case "WITHDRAW":
-      return state - action.payload;
-    default:
-      return state;
-  }
-}
+// function reducer(state = 0, action) {
+//   switch (action.type) {
+//     case "DEPOSIT":
+//       return state + action.payload;
+//     case "WITHDRAW":
+//       return state - action.payload;
+//     default:
+//       return state;
+//   }
+// }
 
-function actionDeposit(payload) {
-  return { type: "DEPOSIT", payload };
-}
+// function actionDeposit(payload) {
+//   return { type: "DEPOSIT", payload };
+// }
 
-function actionWithdraw(payload) {
-  return { type: "WITHDRAW", payload };
-}
+// function actionWithdraw(payload) {
+//   return { type: "WITHDRAW", payload };
+// }
 
-deposit.onclick = function () {
-  store.dispatch(actionDeposit(10));
-};
+// deposit.onclick = function () {
+//   store.dispatch(actionDeposit(10));
+// };
 
-withdraw.onclick = function () {
-  store.dispatch(actionWithdraw(10));
-};
+// withdraw.onclick = function () {
+//   store.dispatch(actionWithdraw(10));
+// };
 
-const store = createStore(reducer);
+// const store = createStore(reducer);
 
-store.subscribe(() => {
-  render();
-});
+// store.subscribe(() => {
+//   render();
+// });
 
-render();
-function render() {
-  output.innerText = store.getState();
-}
+// render();
+// function render() {
+//   output.innerText = store.getState();
+// }
 
 const schemes = [
   {
@@ -86,85 +86,85 @@ const schemes = [
   },
 ];
 
-const app = (function () {
-  const cars = ["BMW"];
-  let editIndex = null;
+// const app = (function () {
+//   const cars = ["BMW"];
+//   let editIndex = null;
 
-  const root = $("#root");
-  const input = $("#input");
-  const button = $("#button");
+//   const root = $("#root");
+//   const input = $("#input");
+//   const button = $("#button");
 
-  return {
-    add(car) {
-      cars.push(car);
-    },
-    update(index, newValue) {
-      if (index >= 0 && index < cars.length) {
-        cars[index] = newValue;
-      }
-    },
-    delete(index) {
-      cars.splice(index, 1);
-    },
-    render() {
-      const html = cars
-        .map(
-          (car, index) => `
-          <li>
-            ${car}
-            <span class="delete" data-action="delete" data-index=${index}>&times</span>
-            <div class="edit"  data-action="edit" data-index=${index}>edit</div>
-          </li>`
-        )
-        .join("");
-      root.innerHTML = html;
-    },
-    handleAction(e) {
-      const action = e.target.getAttribute("data-action");
-      const indices = e.target.getAttribute("data-index");
+//   return {
+//     add(car) {
+//       cars.push(car);
+//     },
+//     update(index, newValue) {
+//       if (index >= 0 && index < cars.length) {
+//         cars[index] = newValue;
+//       }
+//     },
+//     delete(index) {
+//       cars.splice(index, 1);
+//     },
+//     render() {
+//       const html = cars
+//         .map(
+//           (car, index) => `
+//           <li>
+//             ${car}
+//             <span class="delete" data-action="delete" data-index=${index}>&times</span>
+//             <div class="edit"  data-action="edit" data-index=${index}>edit</div>
+//           </li>`
+//         )
+//         .join("");
+//       root.innerHTML = html;
+//     },
+//     handleAction(e) {
+//       const action = e.target.getAttribute("data-action");
+//       const indices = e.target.getAttribute("data-index");
 
-      if (action === "delete") {
-        this.delete(indices);
-        this.render();
-      } else if (action === "edit") {
-        // const newValue = prompt("Enter the new value:", cars[indices]);
-        if (cars[indices] !== null && cars[indices].trim() !== "") {
-          input.value = cars[indices].trim();
-          input.focus();
-          editIndex = indices;
-        }
-      }
-    },
-    init() {
-      const handleAddOrUpdate = () => {
-        const value = input.value;
-        if (!value) return;
-        if (editIndex !== null) {
-          this.update(editIndex, value);
-          editIndex = null;
-        } else {
-          this.add(value);
-        }
-        input.value = "";
-        input.focus();
-        this.render();
-      };
+//       if (action === "delete") {
+//         this.delete(indices);
+//         this.render();
+//       } else if (action === "edit") {
+//         // const newValue = prompt("Enter the new value:", cars[indices]);
+//         if (cars[indices] !== null && cars[indices].trim() !== "") {
+//           input.value = cars[indices].trim();
+//           input.focus();
+//           editIndex = indices;
+//         }
+//       }
+//     },
+//     init() {
+//       const handleAddOrUpdate = () => {
+//         const value = input.value;
+//         if (!value) return;
+//         if (editIndex !== null) {
+//           this.update(editIndex, value);
+//           editIndex = null;
+//         } else {
+//           this.add(value);
+//         }
+//         input.value = "";
+//         input.focus();
+//         this.render();
+//       };
 
-      button.onclick = handleAddOrUpdate;
+//       button.onclick = handleAddOrUpdate;
 
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          handleAddOrUpdate();
-        }
-      });
-      root.onclick = this.handleAction.bind(this);
+//       input.addEventListener("keydown", (e) => {
+//         if (e.key === "Enter") {
+//           handleAddOrUpdate();
+//         }
+//       });
+//       root.onclick = this.handleAction.bind(this);
 
-      this.render();
-    },
-  };
-})();
+//       this.render();
+//     },
+//   };
+// })();
 
-app.init();
+// app.init();
 
 const array = new Array(5, 2, 1, 3, 4, 5, 1, 5, 4, 3, 2, 1);
 
