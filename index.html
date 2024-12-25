@@ -14,10 +14,42 @@
         .form-field {
             margin-bottom: 15px;
         }
+
+        h1 {
+            text-align: center;
+        }
+
+        .todo-app {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: gray;
+        }
     </style>
 </head>
 
 <body>
+    <div id="app" class="todo-app">
+        <h1>To-Do App</h1>
+        <div>
+            <input ref="inputRef" type="text" v-model="newTodo" placeholder="Add new task"
+                @keyup.enter="handleAction" />
+            <button @click="handleAction">{{editIndex === null ? 'Add' : 'Update'}}</button>
+        </div>
+        <ul>
+            <li v-for="(todo, index) in todos" :key="index">
+                <span :class="{done: todo.complete}" @click="toggleComplete(index)">
+                    {{todo.text}}
+                </span>
+                <button @click="removeTodo(index)">Remove</button>
+                <button @click="startUpdate(index)">Update</button>
+            </li>
+        </ul>
+    </div>
     <form id="registration-form">
         <div class="form-field">
             <label for="username">Username:</label>
@@ -41,13 +73,49 @@
     </form>
     <input type="text" placeholder="Enter car name" id="input" />
     <button id="button">Add New Car</button>
-    <ol id="root"></ol>
+    <ul id="root"></ul>
     <h1 id="output"></h1>
     <button id="deposit">Deposit</button>
     <button id="withdraw">Withdraw</button>
     <script type="module" src="/components//formValidation.js"></script>
     <script type="module" src="/script.js"></script>
     <script type="module" src="/components/redux.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data: () => ({ newTodo: '', todos: [{ text: 1234, complete: false }], editIndex: null }),
+            methods: {
+                handleAction() {
+                    if (this.editIndex !== null) {
+                        this.todos[this.editIndex].text = this.newTodo
+                        this.resetForm()
+                    }
+                    else if (this.newTodo.trim() !== '') {
+                        this.todos.push({ text: this.newTodo, complete: false })
+                        this.resetForm()
+                    }
+                },
+                toggleComplete(index) {
+                    this.todos[index].complete = !this.todos[index].complete
+                },
+                removeTodo(index) {
+                    return this.todos.splice(index, 1)
+                },
+                startUpdate(index) {
+                    this.editIndex = index
+                    this.newTodo = this.todos[index].text
+                    this.$refs.inputRef.focus()
+                },
+                resetForm() {
+                    this.newTodo = ''
+                    this.editIndex = null
+                    this.$refs.inputRef.focus()
+                }
+            }
+        })
+
+        app.mount('#app')
+    </script>
 </body>
 
 </html>

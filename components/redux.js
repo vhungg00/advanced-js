@@ -61,51 +61,139 @@ function render() {
   output.textContent = store.getState();
 }
 
+// const app = (() => {
+//   const cars = ["BMW"];
+//   const root = $("#root");
+//   const input = $("#input");
+//   const button = $("#button");
+
+//   return {
+//     add(car) {
+//       return cars.push(car);
+//     },
+//     delete(index) {
+//       cars.splice(index, 1);
+//     },
+//     render() {
+//       const html = cars
+//         .map(
+//           (car, index) => `
+//         <li>
+//             ${car}
+//             <span class='delete' data-index='${index}'>&times</span>
+//         </li>
+//         `
+//         )
+//         .join("");
+//       root.innerHTML = html;
+//     },
+//     // Delegate Pattern
+//     handleDelete(event) {
+//       const deleteBtn = event.target.closest(".delete");
+//       if (!deleteBtn) return;
+//       const index = deleteBtn.dataset.index;
+//       this.delete(index);
+//       this.render();
+//     },
+//     init() {
+//       button.onclick = () => {
+//         const car = input.value;
+//         if (!car) return;
+//         this.add(car);
+//         this.render();
+//         input.value = null;
+//         input.focus();
+//       };
+
+//       root.onclick = this.handleDelete.bind(this);
+//       this.render();
+//     },
+//   };
+// })();
+
+// app.init();
+
 const app = (() => {
   const cars = ["BMW"];
   const root = $("#root");
   const input = $("#input");
   const button = $("#button");
 
+  let editIndex = null;
+
   return {
-    add(car) {
-      return cars.push(car);
+    handleAction(car) {
+      cars.push(car);
     },
-    delete(index) {
+    handleDelete(index) {
       cars.splice(index, 1);
+    },
+    handleUpdate(index, value) {
+      cars[index] = value;
+    },
+    resetForm() {
+      input.value = "";
+      input.focus();
+      this.render();
+      editIndex = null;
+    },
+    handleActionDeleteOrUpdate(event) {
+      const targetElement = event.target.closest(".delete, .update");
+
+      if (!targetElement) return;
+
+      const indices = targetElement.dataset.index;
+
+      if (targetElement.classList.contains("delete")) {
+        this.handleDelete(indices);
+        this.render();
+      }
+
+      if (targetElement.classList.contains("update")) {
+        editIndex = indices;
+        input.value = cars[indices].trim();
+        input.focus();
+        this.updateButtonText();
+      }
     },
     render() {
       const html = cars
         .map(
           (car, index) => `
-        <li>
-            ${car}
-            <span class='delete' data-index='${index}'>&times</span>
-        </li>
-        `
+            <li key="${index}">
+              ${car}
+              <span class="delete" data-index="${index}">&times</span>
+              <button class="update" data-index=${index}>update</button>
+            </li>`
         )
         .join("");
+
       root.innerHTML = html;
     },
-    // Delegate Pattern
-    handleDelete(event) {
-      const deleteBtn = event.target.closest(".delete");
-      if (!deleteBtn) return;
-      const index = deleteBtn.dataset.index;
-      this.delete(index);
-      this.render();
+    updateButtonText() {
+      button.innerText = editIndex === null ? "Add New Car" : "Update Car";
     },
+
     init() {
       button.onclick = () => {
-        const car = input.value;
-        if (!car) return;
-        this.add(car);
+        const value = input.value;
+
+        if (!value) return;
+
+        if (editIndex !== null) {
+          this.handleUpdate(editIndex, value);
+          editIndex = null;
+        } else {
+          this.handleAction(input.value);
+        }
+        this.updateButtonText()
         this.render();
-        input.value = null;
-        input.focus();
+        this.resetForm();
       };
 
-      root.onclick = this.handleDelete.bind(this);
+      this.updateButtonText();
+
+      root.onclick = this.handleActionDeleteOrUpdate.bind(this);
       this.render();
     },
   };
