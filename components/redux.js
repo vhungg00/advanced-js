@@ -199,6 +199,23 @@ const app = (() => {
   };
 })();
 
+
+// const app = (() => {
+//   const cars = ['BMW']
+//   const elRoot = $("#root");
+//   const elInput = $("#input");
+//   const elButton = $("#button");
+
+//   return {
+
+//     render() {
+//       const html = cars.map((car) => `
+//         <li>${car}</li>
+//       `)
+//     }
+//   }
+// })()
+
 app.init();
 
 const teacher = {
